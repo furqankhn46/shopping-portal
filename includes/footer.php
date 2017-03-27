@@ -18,7 +18,7 @@
     function detailsmodal(id){
         var data ={"id":id};
     jQuery.ajax({
-        url: <?=BASEURL;?>+'includes/detailsmodal.php',
+        url: "<?php print WEBURL; ?>/includes/detailsmodal.php",
         method:"post",
         data:data,
         headers: { "cache-control": "no-cache" },
