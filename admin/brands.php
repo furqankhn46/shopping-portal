@@ -8,25 +8,27 @@ $results=$db->query($sql);
 $errors=array();
 //if add form is submitted
 if(isset($_POST['add_submit'])){
+    $brand=sanitize($_POST['brand']);
     //check if brand is blank
     if($_POST['brand']==''){
-        $brand=$_POST['brand'];
         $errors[].='you must enter a brand!';
     }
-    print_r($_POST['brand']); die;
     //check if brands exist in database
+    $brand=$_POST['brand'];
     $sql="SELECT *FROM brand WHERE brand='$brand'";
     $result=$db->Query($sql);
-    $brandi=mysqli_fetch_assoc($result);
-    print_r($brandi); die;
     $count=mysqli_num_rows($result);
-    echo $count;
+    if($count>0){
+        $errors[].=$brand.' already exist. Please choose another brand name...';
+    }
     //display error
     if(!empty($errors )){
         echo display_errors($errors);
     }else{
         //add brand to database
-
+        $sql="INSERT INTO brand (brand) VALUES('$brand')";
+        $db->Query($sql);
+        header('Location:brands.php');
     }
 }
 ?>
@@ -46,7 +48,7 @@ if(isset($_POST['add_submit'])){
         <div class="form-group"
     </form>
 </div>
-<table class="table table-bordered table-striped table-auto">
+<table class="table table-bordered table-striped table-auto table-condensed">
     <thead>
     <th></th><th>Brand</th><th></th>
     </thead>
