@@ -1,5 +1,4 @@
 </div><br><br>
-<footer class="text-center" id="footer">&copy; copyright 2013-2017 AlbilalchickenPoint</footer>
-
-</body>
+<div class="col-md-12 text-center">&copy; copyright 2013-2017 AlbilalchickenPoint</div>
+    </body>
 </html>

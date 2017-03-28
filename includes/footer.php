@@ -1,5 +1,5 @@
 </div><br><br>
-<footer class="text-center" id="footer">&copy; copyright 2013-2017 AlbilalchickenPoint</footer>
+<div class="col-md-12 text-center">&copy; copyright 2013-2017 AlbilalchickenPoint</div>
 <div id="details-modal-div"></div>
 
 <script>
