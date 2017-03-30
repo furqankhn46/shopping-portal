@@ -2,10 +2,30 @@
 require_once '../core/init.php';
 include  'include/head.php';
 include 'include/navigation.php';
-//get brads from database
+//get brands from database
 $sql="SELECT *FROM brand ORDER BY brand";
 $results=$db->query($sql);
 $errors=array();
+
+//Edit Brand
+if(isset($_GET['edit'])&&!empty($_GET['edit'])){
+    $edit_id=(int)$_GET['edit'];
+    $edit_id=sanitize($edit_id);
+    $sql2="SELECT *FROM brand WHERE id='$edit_id'";
+    $edit_result=$db->query($sql2);
+    $eBrand=mysqli_fetch_assoc($edit_result);
+
+}
+//Delete Brand
+if(isset($_GET['delete'])&&($_GET['delete'])){
+    $delete_id=(int)$_GET['delete'];
+    $delet_id=sanitize($delete_id);
+    $sql="DELETE FROM brand WHERE id='$delet_id'";
+    $db->query($sql);
+    header('Location: brands.php');
+}
+
+
 //if add form is submitted
 if(isset($_POST['add_submit'])){
     $brand=sanitize($_POST['brand']);
@@ -16,6 +36,10 @@ if(isset($_POST['add_submit'])){
     //check if brands exist in database
     $brand=$_POST['brand'];
     $sql="SELECT *FROM brand WHERE brand='$brand'";
+    if(isset($_GET['edit'])){
+        $sql="SELECT *FROM brand WHERE brand='$brand' AND id!='$edit_id'";
+
+    }
     $result=$db->Query($sql);
     $count=mysqli_num_rows($result);
     if($count>0){
@@ -27,6 +51,10 @@ if(isset($_POST['add_submit'])){
     }else{
         //add brand to database
         $sql="INSERT INTO brand (brand) VALUES('$brand')";
+        if(isset($_GET['edit'])){
+            $ubrand=trim($brand);
+            $sql="UPDATE brand SET brand='$ubrand' WHERE id ='$edit_id'";
+        }
         $db->Query($sql);
         header('Location:brands.php');
     }
@@ -35,11 +63,27 @@ if(isset($_POST['add_submit'])){
 <h2 class="text-center">Brands</h2><hr>
 <!--''brand form-->
 <div class="text-center">
-    <form class="form-inline" action="brands.php" method="post">
+    <form class="form-inline" action="brands.php<?=((isset($_GET['edit']))?'?edit='.$edit_id: '');?>" method="post">
         <div class="form-group">
-            <label for="brand">Add A Brand:</label>
-            <input type="text" name="brand" id="brand" class="form-control" value="<?=((isset($_POST['brand']))?$_POST['brand']:'');?>">
-            <input type="submit" name="add_submit" id="add_submit" value="Add Brand" class="btn btn-success">
+            <?php
+            $brand_value= '';
+            if(isset($_GET['edit'])){
+                $brand_value=$eBrand['brand'];
+            } else{
+                if(isset($_POST['brand'])){
+                    $brand_value=sanitize($_POST['brand']);
+                }
+
+            }
+
+            ?>
+            <label for="brand"><?=((isset($_GET['edit']))?'Edit ':'Add A ')?>Brand:</label>
+            <input type="text" name="brand" id="brand" class="form-control" value="<?=$brand_value;?>">
+            <?php if(isset($_GET['edit'])):?>
+                <a  href="brands.php" class=" btn btn-default">Cancel</a>
+
+            <?php endif; ?>
+            <input type="submit" name="add_submit" id="add_submit" value="<?=((isset($_GET['edit']))?'Edit ':'Add ')?> Brand" class="btn btn-success">
         </div>
     </form>
 </div><hr>
