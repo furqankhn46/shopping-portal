@@ -11,3 +11,10 @@ function display_errors($errors){
 function sanitize($dirty){
     return htmlentities($dirty,ENT_QUOTES,"UTF-8");
 }
+
+function p($data) {
+    echo "<pre>";
+    print_r($data);
+    echo "</pre>";
+    die;
+}
