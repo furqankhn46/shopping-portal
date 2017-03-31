@@ -18,3 +18,7 @@ function p($data) {
     echo "</pre>";
     die;
 }
+
+function money($number){
+    return '$'. number_format($number,2);
+}
