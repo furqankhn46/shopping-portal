@@ -1,5 +1,5 @@
 <?php
-require_once  $_SERVER['DOCUMENT_ROOT'].'/shoppingPortal/core/init.php';
+require_once  $_SERVER['DOCUMENT_ROOT'].'/core/init.php';
 include 'include/head.php';
 include 'include/navigation.php';
 $sql="SELECT *FROM product WHERE deleted = '0'";
@@ -23,8 +23,8 @@ if(isset($_GET['featured'])){
         $child=mysqli_fetch_assoc($result);
         $parentID=$child['parent'];
         $psql="SELECT *FROM categories WHERE id='$parentID'";
-        $presults=$db->query($psql);
-        $parent=mysqli_fetch_assoc($presults);
+        $presults1=$db->query($psql);
+        $parent=mysqli_fetch_assoc($presults1);
         $category=$parent['category'].'~'.$child['category'];
         ?>
         <tr>

@@ -1,4 +1,4 @@
 <?php
-define('BASEURL',$_SERVER['DOCUMENT_ROOT'].'/shoppingPortal');
-define('WEBURL',"http://localhost/shoppingPortal");
+define('BASEURL',$_SERVER['DOCUMENT_ROOT']);
+define('WEBURL',"http://osp.dev");
 
