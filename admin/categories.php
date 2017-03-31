@@ -1,5 +1,5 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'].'/core/init.php';
+require_once $_SERVER['DOCUMENT_ROOT'].'/shoppingPortal/core/init.php';
 include 'include/head.php';
 include 'include/navigation.php';
 
