@@ -5,7 +5,8 @@ include 'include/navigation.php';
 //Delete product
 if (isset($_GET['delete'])) {
     $id = sanitize($_GET['delete']);
-    $db->query("UPDATE product SET delete='1' WHERE id=$id");
+    $db->query("UPDATE product SET deleted='1' WHERE id=$id");
+    header('Location:products.php');
 }
 $db_path = '';
 if (isset($_GET['add']) || (isset($_GET['edit']))) {
@@ -179,7 +180,7 @@ if (isset($_GET['add']) || (isset($_GET['edit']))) {
         </div>
         <div class="form-group col-md-6">
             <?php if ($save_image != ''): ?>
-                <div class="save-image">
+                <div class="save-image" >
                     <img src="<?= $save_image; ?>" alt="save_image"/><br>
                     <a href="products.php?delete_image=delete=1&edit=<?= $edit_id; ?>" class="text-danger">Delete
                         Image</a>
