@@ -66,3 +66,7 @@ body{
 #add-product-btn{
     margin-top: -35px;
 }
+.save_image img{
+    width:200px;
+    height:auto;
+}
