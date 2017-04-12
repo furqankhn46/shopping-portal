@@ -1,10 +1,13 @@
 <?php
 require_once '../core/init.php';
 if(!is_logged_in()){
-    header('Location:login.php');
+    login_error_redirect();
+}
+if(!has_permission('admin')){
+    permission_error_redirect('index.php');
 }
 include  'include/head.php';
 include 'include/navigation.php';
 ?>
-Administrator Home
+users
 <?php include'include/footer.php';?>
