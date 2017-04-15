@@ -53,3 +53,6 @@ function has_permission($permission='admin'){
     }
     return false;
 }
+function pretty_date($date){
+    return date("M d, Y h:i", strtotime($date));
+}

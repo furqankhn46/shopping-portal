@@ -76,8 +76,7 @@ $size_array=explode(',',$sizestring);
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-default " onclick="closeModal()">close</button>
-                    <button class="btn btn-warning " type="submit"><span class="glyphicon glyphicon-shopping-cart"> Add to Cart
-                    </button>
+                    <button class="btn btn-warning" type="submit"><span class="glyphicon glyphicon-shopping-cart"></span>Add To Cart</button>
                 </div>
             </div>
         </div>

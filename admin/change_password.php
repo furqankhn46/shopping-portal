@@ -4,77 +4,71 @@ if(!is_logged_in()){
     login_error_redirect();
 }
 include 'include/head.php';
-$email = ((isset($_POST['email'])) ? sanitize($_POST['email']) : '');
-$email = trim($email);
+$hashed=$user_data['password'];
+$old_password = ((isset($_POST['old_password'])) ? sanitize($_POST['old_password']) : '');
+$old_password = trim($old_password);
 $password = ((isset($_POST['password'])) ? sanitize($_POST['password']) : '');
 $password = trim($password);
+$confirm = ((isset($_POST['confirm'])) ? sanitize($_POST['confirm']) : '');
+$confirm = trim($confirm);
+$new_hashed=password_hash($password,PASSWORD_DEFAULT);
+$user_id=$user_data['id'];
 $errors = array();
 ?>
-<style>
-    body {
-        background-image: url("/shoppingPortal/images/headerlogo/background.png");;
-        background-size: 100vw 100vh;
-        background-attachment: fixed;
-    }
-</style>
-<div id="login-form">
-    <div>
-        <?php
-        if ($_POST) {
-            //form validation
-            if (empty($_POST['email']) || empty($_POST['password'])) {
-                $errors[] = 'You must provide email and password.';
-            }
+    <div id="login-form">
+        <div>
+            <?php
+            if ($_POST) {
+                //form validation
+                if (empty($_POST['old_password']) || empty($_POST['password'])|| empty($_POST['confirm'])) {
+                    $errors[] = 'You must fill out all field.';
+                }
 
-            // validate email
-            if (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
-                $errors[] = 'You must a valid email';
-            }
-            // password is more than 6 charachers
-            if (strlen($password) < 6) {
-                $errors[] = 'password must be at least 6 character.';
-            } else {
+                // password is more than 6 charachers
+                if (strlen($password) < 6) {
+                    $errors[] = 'password must be at least 6 character.';
+                }
 
-            }
+                //if new password matches confirm
+                if($password != $confirm){
+                    $errors[]='The new password  and confirm new password does not match.';
+                }
 
+                if (!password_verify($old_password, $hashed)) {
+                    $errors[] = 'Your old password does not match out records.';
+                }
 
-            //check if email exists in the database
-            $query = $db->query("SELECT * FROM users WHERE email='$email'");
-            $user = mysqli_fetch_assoc($query);
-            $userCount = mysqli_num_rows($query);
-            if ($userCount < 1) {
-                $errors[] = 'That email doesn\'t exist in our database';
+                //echeck for errors
+                if (!empty($errors)) {
+                    echo display_errors($errors);
+                } else {
+                    //change password
+                    $db->query("UPDATE users SET password='$new_hashed' WHERE id='$user_id'");
+                    $_SESSION['success_flash']='Your password has been updated';
+                    header('Location:index.php');
+                }
             }
-            if (!password_verify($password, $user['password'])) {
-                $errors[] = 'The password does not match out records. please try again.';
-            }
-
-//                p($password);
-            //echeck for errors
-            if (!empty($errors)) {
-                echo display_errors($errors);
-            } else {
-                //log use in
-                $user_id=$user['id'];
-                login($user_id);
-            }
-        }
-        ?>
+            ?>
+        </div>
+        <h2 class="text-center">Change Password</h2>
+        <form action="change_password.php" method="post">
+            <div class="form-group">
+                <label for="old_password">Old Password:</label>
+                <input type="password" name="old_password" id="old_password" class="form-control" value="<?= $old_password; ?>">
+            </div>
+            <div class="form-group">
+                <label for="password">New Password:</label>
+                <input type="password" name="password" id="password" class="form-control" value="<?= $password; ?>">
+            </div>
+            <div class="form-group">
+                <label for="confirm">Confirm New Password:</label>
+                <input type="password" name="confirm" id="confirm" class="form-control" value="<?= $confirm; ?>">
+            </div>
+            <div class="form-group">
+                <a href="index.php" class="btn btn-default">Cancel</a>
+                <input type="submit" class="btn btn-primary" value="Login">
+            </div>
+        </form>
+        <p class="text-right"><a href="/shoppingPortal/index.php" alt="home">Visit Site</a></p>
     </div>
-    <h2 class="text-center">Login</h2>
-    <form action="login.php" method="post">
-        <div class="form-group">
-            <label for="email">Email:</label>
-            <input type="text" name="email" id="email" class="form-control" value="<?= $email; ?>">
-        </div>
-        <div class="form-group">
-            <label for="password">Password:</label>
-            <input type="password" name="password" id="password" class="form-control" value="<?= $password; ?>">
-        </div>
-        <div class="form-group">
-            <input type="submit" class="btn btn-primary" value="Login">
-        </div>
-    </form>
-    <p class="text-right"><a href="/shoppingPortal/index.php" alt="home">Visit Site</a></p>
-</div>
 <?php include 'include/footer.php'; ?>
